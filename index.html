@@ -1,0 +1,2271 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MedicoCare</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --blue: #2563eb;
+      --green: #16a34a;
+      --red: #dc2626;
+      --amber: #d97706;
+      --info: #0ea5e9;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    .app {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .brand {
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .top-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .main {
+      display: grid;
+      gap: 16px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      min-height: 104px;
+    }
+
+    .card-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .card-value {
+      font-size: 28px;
+      font-weight: 800;
+      margin: 8px 0 4px;
+    }
+
+    .card-value .badge {
+      font-size: 13px;
+      vertical-align: middle;
+    }
+
+    .card-sub {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .card.success .card-value {
+      color: var(--green);
+    }
+
+    .card.warn .card-value {
+      color: var(--amber);
+    }
+
+    .card.danger .card-value {
+      color: var(--red);
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .panel h2,
+    .panel h3 {
+      margin: 0;
+    }
+
+    .table-wrap {
+      overflow: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 820px;
+    }
+
+    th,
+    td {
+      text-align: left;
+      vertical-align: top;
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .badge.success {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .badge.warn {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .badge.danger {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .badge.info {
+      background: #e0f2fe;
+      color: #075985;
+    }
+
+    .badge.muted {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .badge.role {
+      background: #e0e7ff;
+      color: #3730a3;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 12px;
+      padding: 9px 12px;
+      background: var(--blue);
+      color: white;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .btn.secondary {
+      background: #e2e8f0;
+      color: var(--text);
+    }
+
+    .btn.danger {
+      background: var(--red);
+    }
+
+    .btn.small {
+      padding: 6px 9px;
+      font-size: 13px;
+      border-radius: 10px;
+    }
+
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .link {
+      background: none;
+      border: 0;
+      padding: 0;
+      color: var(--blue);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .small {
+      font-size: 12px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--text);
+      border-radius: 999px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .chip.active {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: white;
+    }
+
+    .alert {
+      border-radius: 14px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .alert.success {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .alert.warn {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .alert.danger {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .alert.info {
+      background: #e0f2fe;
+      color: #075985;
+    }
+
+    .empty {
+      padding: 28px 16px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .empty .actions {
+      justify-content: center;
+      margin-top: 12px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .login-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-card {
+      width: min(980px, 100%);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 24px;
+    }
+
+    .login-card h1 {
+      margin: 0 0 8px;
+      font-size: 34px;
+    }
+
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .role-card {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .role-card p {
+      min-height: 64px;
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 60;
+    }
+
+    .modal {
+      width: min(620px, 100%);
+      max-height: 90vh;
+      overflow: auto;
+      background: white;
+      border-radius: 20px;
+      padding: 18px;
+    }
+
+    .modal h3 {
+      margin: 0 0 8px;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px;
+      background: white;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    #toast-root {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      display: grid;
+      gap: 8px;
+      z-index: 80;
+    }
+
+    .toast {
+      min-width: 260px;
+      max-width: 360px;
+      background: #0f172a;
+      color: white;
+      border-radius: 14px;
+      padding: 11px 13px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.24);
+      font-weight: 700;
+    }
+
+    .toast.success {
+      border-left: 5px solid var(--green);
+    }
+
+    .toast.error {
+      border-left: 5px solid var(--red);
+    }
+
+    .toast.warning {
+      border-left: 5px solid var(--amber);
+    }
+
+    .toast.info {
+      border-left: 5px solid var(--info);
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="modal-root"></div>
+  <div id="toast-root"></div>
+
+  <script>
+    const STORAGE_KEY = "factwise_tpm_quarantine_v1";
+    const FEVER_THRESHOLD = 38.0;
+    const TEMP_UNIT = "°C";
+    const CAPACITY = 74;
+
+    function toDateStr(d) {
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    }
+
+    function todayStr() {
+      return toDateStr(new Date());
+    }
+
+    function addDays(dateStr, days) {
+      const d = new Date(`${dateStr}T00:00:00`);
+      d.setDate(d.getDate() + days);
+      return toDateStr(d);
+    }
+
+    function uid() {
+      return Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+    }
+
+    function esc(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (s) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[s]));
+    }
+
+    function normalizePatient(p) {
+      return {
+        id: p.id || uid(),
+        name: p.name || "Unknown",
+        age: p.age || "",
+        sex: p.sex || "",
+        admittedDate: p.admittedDate || todayStr(),
+        status: p.status || "active",
+        temps: p.temps || [],
+        visits: p.visits || [],
+        dischargeRequested: !!p.dischargeRequested,
+        dischargeRequestedDate: p.dischargeRequestedDate || null,
+        dischargeRequestedBy: p.dischargeRequestedBy || null,
+        dischargeDate: p.dischargeDate || null,
+        deathDate: p.deathDate || null
+      };
+    }
+
+    function loadState() {
+      const fallback = {
+        role: null,
+        patients: [],
+        selectedPatientId: null
+      };
+
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return fallback;
+
+        const parsed = JSON.parse(raw);
+
+        if (!["nurse", "doctor", "admin"].includes(parsed.role)) {
+          parsed.role = null;
+        }
+
+        parsed.patients = (parsed.patients || []).map(normalizePatient);
+
+        return {
+          ...fallback,
+          ...parsed
+        };
+      } catch (err) {
+        return fallback;
+      }
+    }
+
+    let state = loadState();
+    let uiFilter = "all";
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function getPatient(id) {
+      return state.patients.find((p) => p.id === id);
+    }
+
+    function activePatients() {
+      return state.patients.filter((p) => p.status === "active");
+    }
+
+    function todayTemp(p) {
+      return p.temps.find((t) => t.date === todayStr()) || null;
+    }
+
+    function todayVisit(p) {
+      return p.visits.find((v) => v.date === todayStr()) || null;
+    }
+
+    function maxTempOn(p, date) {
+      const list = p.temps.filter((t) => t.date === date);
+      if (!list.length) return null;
+      return Math.max(...list.map((t) => Number(t.temp)));
+    }
+
+    function hasFeverOn(p, date) {
+      const max = maxTempOn(p, date);
+      return max !== null && max >= FEVER_THRESHOLD;
+    }
+
+    function afebrileStreak(p) {
+      if (!p || p.status !== "active") return 0;
+
+      const today = todayStr();
+
+      if (hasFeverOn(p, today)) return 0;
+
+      let streak = 0;
+
+      for (let i = 1; i <= 90; i++) {
+        const date = addDays(today, -i);
+        const max = maxTempOn(p, date);
+
+        if (max === null || max >= FEVER_THRESHOLD) {
+          break;
+        }
+
+        streak++;
+      }
+
+      return streak;
+    }
+
+    function isEligible(p) {
+      return (
+        p.status === "active" &&
+        !!todayTemp(p) &&
+        afebrileStreak(p) >= 3 &&
+        !hasFeverOn(p, todayStr())
+      );
+    }
+
+    function needsTemp(p) {
+      return p.status === "active" && !todayTemp(p);
+    }
+
+    function needsVisit(p) {
+      return p.status === "active" && !!todayTemp(p) && !todayVisit(p);
+    }
+
+    function dischargeBlockers(p) {
+      const blockers = [];
+
+      if (p.status !== "active") {
+        blockers.push("patient is not active");
+      }
+
+      if (!p.dischargeRequested) {
+        blockers.push("doctor has not requested discharge");
+      }
+
+      if (!todayTemp(p)) {
+        blockers.push("today's temperature is missing");
+      }
+
+      if (hasFeverOn(p, todayStr())) {
+        blockers.push("fever recorded today");
+      }
+
+      if (afebrileStreak(p) < 3) {
+        blockers.push("fewer than 3 full fever-free days with recorded temperatures");
+      }
+
+      if (!todayVisit(p)) {
+        blockers.push("today's doctor visit is missing");
+      }
+
+      return blockers;
+    }
+
+    function canAdminDischarge(p) {
+      return (
+        p.status === "active" &&
+        p.dischargeRequested &&
+        isEligible(p) &&
+        !!todayTemp(p) &&
+        !hasFeverOn(p, todayStr()) &&
+        !!todayVisit(p)
+      );
+    }
+
+    function getMetrics() {
+      const active = activePatients().length;
+      const discharged = state.patients.filter((p) => p.status === "discharged").length;
+      const deaths = state.patients.filter((p) => p.status === "deceased").length;
+      const closed = discharged + deaths;
+
+      const mortality = closed ? Math.round((deaths / closed) * 1000) / 10 : null;
+      const success = closed ? Math.round((discharged / closed) * 1000) / 10 : null;
+
+      return {
+        active,
+        capacity: CAPACITY,
+        free: CAPACITY - active,
+        discharged,
+        deaths,
+        closed,
+        mortality,
+        success,
+        overBenchmark: closed ? mortality > 15 : false
+      };
+    }
+
+    function roleLabel(role) {
+      if (role === "nurse") return "Nurse";
+      if (role === "doctor") return "Doctor";
+      if (role === "admin") return "Admin";
+      return "Unknown";
+    }
+
+    function selectRole(role) {
+      state.role = role;
+      state.selectedPatientId = null;
+      uiFilter = "all";
+      saveState();
+      render();
+    }
+
+    function logout() {
+      state.role = null;
+      state.selectedPatientId = null;
+      uiFilter = "all";
+      saveState();
+      render();
+    }
+
+    function openPatient(id) {
+      state.selectedPatientId = id;
+      saveState();
+      render();
+    }
+
+    function goBack() {
+      state.selectedPatientId = null;
+      saveState();
+      render();
+    }
+
+    function setFilter(filter) {
+      uiFilter = filter;
+      render();
+    }
+
+    function resetApp() {
+      if (confirm("Reset all local prototype data?")) {
+        localStorage.removeItem(STORAGE_KEY);
+        state = {
+          role: null,
+          patients: [],
+          selectedPatientId: null
+        };
+        uiFilter = "all";
+        render();
+        showToast("Local data reset.", "success");
+      }
+    }
+
+    function seedDemo() {
+      if (state.patients.length && !confirm("Replace current local data with demo data?")) {
+        return;
+      }
+
+      state.patients = demoPatients();
+      state.selectedPatientId = null;
+      saveState();
+      render();
+      showToast("Demo data loaded.", "success");
+    }
+
+    function openModal(html) {
+      document.getElementById("modal-root").innerHTML = `
+        <div class="modal-backdrop" onclick="closeModal(event)">
+          <div class="modal" onclick="event.stopPropagation()">
+            ${html}
+          </div>
+        </div>
+      `;
+    }
+
+    function closeModal(event) {
+      if (event && event.target !== event.currentTarget) return;
+      document.getElementById("modal-root").innerHTML = "";
+    }
+
+    function showToast(message, type = "info") {
+      const root = document.getElementById("toast-root");
+      const el = document.createElement("div");
+      el.className = `toast ${type}`;
+      el.textContent = message;
+      root.appendChild(el);
+
+      setTimeout(() => {
+        el.remove();
+      }, 4200);
+    }
+
+    function openAddPatientModal() {
+      if (state.role === "doctor") {
+        showToast("Admission is enabled for nurses and admins in this prototype.", "error");
+        return;
+      }
+
+      if (activePatients().length >= CAPACITY) {
+        showToast("Facility is at full capacity. Discharge a patient before admitting a new one.", "error");
+        return;
+      }
+
+      openModal(`
+        <h3>Admit Patient</h3>
+        <p class="muted">Current occupancy: ${activePatients().length}/${CAPACITY}</p>
+
+        <form onsubmit="handleAddPatient(event)">
+          <div class="form-group">
+            <label for="patient-name">Full name</label>
+            <input id="patient-name" required placeholder="Patient full name" />
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="patient-age">Age</label>
+              <input id="patient-age" type="number" min="0" max="120" placeholder="Optional" />
+            </div>
+
+            <div class="form-group">
+              <label for="patient-sex">Sex</label>
+              <select id="patient-sex">
+                <option value="">Select</option>
+                <option>F</option>
+                <option>M</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn secondary" onclick="closeModal()">Cancel</button>
+            <button type="submit" class="btn">Admit Patient</button>
+          </div>
+        </form>
+      `);
+    }
+
+    function handleAddPatient(event) {
+      event.preventDefault();
+
+      if (activePatients().length >= CAPACITY) {
+        showToast("Facility is at full capacity. Discharge a patient before admitting a new one.", "error");
+        return;
+      }
+
+      const name = document.getElementById("patient-name").value.trim();
+      const age = document.getElementById("patient-age").value.trim();
+      const sex = document.getElementById("patient-sex").value;
+
+      if (!name) {
+        showToast("Patient name is required.", "error");
+        return;
+      }
+
+      state.patients.push({
+        id: uid(),
+        name,
+        age,
+        sex,
+        admittedDate: todayStr(),
+        status: "active",
+        temps: [],
+        visits: [],
+        dischargeRequested: false,
+        dischargeRequestedDate: null,
+        dischargeRequestedBy: null,
+        dischargeDate: null,
+        deathDate: null
+      });
+
+      saveState();
+      closeModal();
+      render();
+      showToast("Patient admitted.", "success");
+    }
+
+    function openTempModal(id) {
+      const p = getPatient(id);
+      if (!p) return;
+
+      if (p.status !== "active") {
+        showToast("Only active patients can have temperatures recorded.", "error");
+        return;
+      }
+
+      const existing = todayTemp(p);
+
+      openModal(`
+        <h3>${existing ? "Update" : "Record"} Temperature</h3>
+        <p class="muted">${esc(p.name)} • ${todayStr()} • Fever threshold: ${FEVER_THRESHOLD}${TEMP_UNIT}</p>
+
+        <form onsubmit="handleRecordTemp(event, '${p.id}')">
+          <div class="form-group">
+            <label for="temp-value">Temperature (${TEMP_UNIT})</label>
+            <input id="temp-value" type="number" step="0.1" min="34" max="43" required value="${existing ? existing.temp : ""}" />
+          </div>
+
+          ${existing ? `
+            <div class="alert warn">
+              Today already has a temperature. Saving will replace it as a correction instead of creating a duplicate measurement.
+            </div>
+          ` : ""}
+
+          <div class="modal-actions">
+            <button type="button" class="btn secondary" onclick="closeModal()">Cancel</button>
+            <button type="submit" class="btn">${existing ? "Update" : "Save"} Temperature</button>
+          </div>
+        </form>
+      `);
+    }
+
+    function handleRecordTemp(event, id) {
+      event.preventDefault();
+
+      const p = getPatient(id);
+      if (!p) return;
+
+      const input = document.getElementById("temp-value");
+      const temp = parseFloat(input.value);
+
+      if (Number.isNaN(temp) || temp < 34 || temp > 43) {
+        showToast(`Enter a valid temperature between 34 and 43 ${TEMP_UNIT}.`, "error");
+        return;
+      }
+
+      const date = todayStr();
+      const time = new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+
+      const idx = p.temps.findIndex((t) => t.date === date);
+
+      if (idx >= 0) {
+        p.temps[idx] = {
+          ...p.temps[idx],
+          temp,
+          by: roleLabel(state.role),
+          updatedAt: new Date().toISOString()
+        };
+
+        showToast("Today's temperature updated.", "success");
+      } else {
+        p.temps.push({
+          date,
+          temp,
+          by: roleLabel(state.role),
+          time
+        });
+
+        showToast("Temperature recorded.", "success");
+      }
+
+      p.temps.sort((a, b) => (a.date < b.date ? -1 : 1));
+
+      saveState();
+      closeModal();
+      render();
+
+      if (temp >= FEVER_THRESHOLD) {
+        showToast("Fever threshold reached. Flag patient for doctor review.", "warning");
+      }
+    }
+
+    function doctorVisitGuard(id) {
+      const p = getPatient(id);
+      if (!p) return;
+
+      if (p.status !== "active") {
+        showToast("Patient is not active.", "error");
+        return;
+      }
+
+      if (!todayTemp(p)) {
+        showToast("Cannot complete doctor visit until today's temperature is recorded.", "error");
+        return;
+      }
+
+      openVisitModal(id);
+    }
+
+    function openVisitModal(id) {
+      const p = getPatient(id);
+      if (!p) return;
+
+      const existing = todayVisit(p);
+
+      openModal(`
+        <h3>${existing ? "Update" : "Complete"} Doctor Visit</h3>
+        <p class="muted">${esc(p.name)} • ${todayStr()}</p>
+
+        <form onsubmit="handleVisit(event, '${p.id}')">
+          <div class="form-group">
+            <label for="visit-treatment">Treatment / medication</label>
+            <input id="visit-treatment" value="${existing ? esc(existing.treatment || "") : ""}" placeholder="e.g., Paracetamol, hydration, antiviral" />
+          </div>
+
+          <div class="form-group">
+            <label for="visit-note">Clinical note</label>
+            <textarea id="visit-note" rows="4" placeholder="Observations, treatment plan, discharge thinking">${existing ? esc(existing.note || "") : ""}</textarea>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn secondary" onclick="closeModal()">Cancel</button>
+            <button type="submit" class="btn">${existing ? "Update" : "Complete"} Visit</button>
+          </div>
+        </form>
+      `);
+    }
+
+    function handleVisit(event, id) {
+      event.preventDefault();
+
+      const p = getPatient(id);
+      if (!p) return;
+
+      if (!todayTemp(p)) {
+        showToast("Cannot save doctor visit without today's temperature.", "error");
+        return;
+      }
+
+      const treatment = document.getElementById("visit-treatment").value.trim();
+      const note = document.getElementById("visit-note").value.trim();
+
+      const date = todayStr();
+      const time = new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+
+      const idx = p.visits.findIndex((v) => v.date === date);
+
+      if (idx >= 0) {
+        p.visits[idx] = {
+          ...p.visits[idx],
+          treatment,
+          note,
+          by: roleLabel(state.role),
+          updatedAt: new Date().toISOString()
+        };
+
+        showToast("Doctor visit updated.", "success");
+      } else {
+        p.visits.push({
+          date,
+          treatment,
+          note,
+          by: roleLabel(state.role),
+          time
+        });
+
+        showToast("Doctor visit recorded.", "success");
+      }
+
+      p.visits.sort((a, b) => (a.date < b.date ? -1 : 1));
+
+      saveState();
+      closeModal();
+      render();
+    }
+
+    function requestDischarge(id) {
+      const p = getPatient(id);
+      if (!p) return;
+
+      if (p.status !== "active") {
+        showToast("Only active patients can be discharged.", "error");
+        return;
+      }
+
+      if (p.dischargeRequested) {
+        showToast("Discharge has already been requested.", "info");
+        return;
+      }
+
+      if (!todayTemp(p)) {
+        showToast("Record today's temperature before requesting discharge.", "error");
+        return;
+      }
+
+      if (hasFeverOn(p, todayStr()) || afebrileStreak(p) < 3) {
+        showToast("Patient is not eligible: 3 full fever-free days with recorded temperatures are required.", "error");
+        return;
+      }
+
+      if (!todayVisit(p)) {
+        showToast("Complete today's doctor visit before requesting discharge.", "error");
+        return;
+      }
+
+      p.dischargeRequested = true;
+      p.dischargeRequestedDate = todayStr();
+      p.dischargeRequestedBy = roleLabel(state.role);
+
+      saveState();
+      render();
+      showToast("Discharge requested. Admin has been notified.", "success");
+    }
+
+    function cancelDischarge(id) {
+      const p = getPatient(id);
+      if (!p) return;
+
+      p.dischargeRequested = false;
+      p.dischargeRequestedDate = null;
+      p.dischargeRequestedBy = null;
+
+      saveState();
+      render();
+      showToast("Discharge request cancelled.", "info");
+    }
+
+    function adminDischarge(id) {
+      const p = getPatient(id);
+      if (!p) return;
+
+      if (!canAdminDischarge(p)) {
+        const blockers = dischargeBlockers(p);
+        showToast(`Cannot discharge: ${blockers.join("; ")}.`, "error");
+        return;
+      }
+
+      p.status = "discharged";
+      p.dischargeDate = todayStr();
+
+      saveState();
+      render();
+      showToast("Patient discharged as cured.", "success");
+    }
+
+    function openDeathModal(id) {
+      const p = getPatient(id);
+      if (!p || p.status !== "active") return;
+
+      openModal(`
+        <h3>Mark patient deceased</h3>
+        <p class="muted">
+          ${esc(p.name)} will be moved to closed cases and mortality metrics will update.
+        </p>
+
+        <div class="modal-actions">
+          <button type="button" class="btn secondary" onclick="closeModal()">Cancel</button>
+          <button type="button" class="btn danger" onclick="handleDeath('${p.id}')">Confirm</button>
+        </div>
+      `);
+    }
+
+    function handleDeath(id) {
+      const p = getPatient(id);
+      if (!p) return;
+
+      p.status = "deceased";
+      p.deathDate = todayStr();
+      p.dischargeRequested = false;
+      p.dischargeRequestedDate = null;
+      p.dischargeRequestedBy = null;
+
+      saveState();
+      closeModal();
+      render();
+      showToast("Patient marked deceased. Mortality metrics updated.", "warning");
+    }
+
+    function demoPatients() {
+      const t = todayStr();
+      const patients = [];
+
+      function makeActive(name, age, sex, admittedOffset, tempOffsets, visitOffsets, extra = {}) {
+        const temps = tempOffsets.map(([offset, temp]) => ({
+          date: addDays(t, offset),
+          temp,
+          by: "Nurse",
+          time: "08:30"
+        }));
+
+        const visits = visitOffsets.map(([offset, treatment, note]) => ({
+          date: addDays(t, offset),
+          by: "Doctor",
+          treatment,
+          note,
+          time: "10:15"
+        }));
+
+        patients.push({
+          id: uid(),
+          name,
+          age,
+          sex,
+          admittedDate: addDays(t, admittedOffset),
+          status: "active",
+          temps,
+          visits,
+          dischargeRequested: false,
+          dischargeRequestedDate: null,
+          dischargeRequestedBy: null,
+          dischargeDate: null,
+          deathDate: null,
+          ...extra
+        });
+      }
+
+      makeActive(
+        "Asha Rao",
+        34,
+        "F",
+        -8,
+        [
+          [-4, 37.2],
+          [-3, 36.8],
+          [-2, 36.9],
+          [-1, 36.7],
+          [0, 36.8]
+        ],
+        [
+          [-1, "Paracetamol", "Fever under control."]
+        ]
+      );
+
+      makeActive(
+        "Vikram Shah",
+        45,
+        "M",
+        -7,
+        [
+          [-3, 36.9],
+          [-2, 37.0],
+          [-1, 36.8],
+          [0, 36.9]
+        ],
+        [
+          [0, "Hydration", "Stable, ready for discharge."]
+        ],
+        {
+          dischargeRequested: true,
+          dischargeRequestedDate: t,
+          dischargeRequestedBy: "Doctor"
+        }
+      );
+
+      makeActive(
+        "Meena Iyer",
+        51,
+        "F",
+        -6,
+        [
+          [-2, 38.8],
+          [-1, 38.4],
+          [0, 39.1]
+        ],
+        [
+          [-1, "Antiviral", "Monitor closely."]
+        ]
+      );
+
+      makeActive(
+        "Ravi Kumar",
+        29,
+        "M",
+        -5,
+        [
+          [-3, 36.8],
+          [-2, 36.7],
+          [-1, 36.9]
+        ],
+        [
+          [-1, "Observation", "Awaiting today's temperature."]
+        ]
+      );
+
+      makeActive(
+        "Sunita Patil",
+        63,
+        "F",
+        -9,
+        [
+          [-1, 38.1],
+          [0, 36.9]
+        ],
+        [
+          [0, "Observation", "Fever broke, continue monitoring."]
+        ]
+      );
+
+      makeActive(
+        "Arjun Das",
+        39,
+        "M",
+        -10,
+        [
+          [-3, 36.7],
+          [-2, 36.6],
+          [-1, 36.8]
+        ],
+        []
+      );
+
+      const dischargedNames = [
+        "Nina Verma",
+        "Rahul Joshi",
+        "Lakshmi Nair",
+        "Karan Mehta",
+        "Priya Singh"
+      ];
+
+      dischargedNames.forEach((name, i) => {
+        patients.push({
+          id: uid(),
+          name,
+          age: 30 + i * 5,
+          sex: i % 2 ? "M" : "F",
+          admittedDate: addDays(t, -15 + i),
+          status: "discharged",
+          dischargeDate: addDays(t, -1 - i),
+          temps: [],
+          visits: [],
+          dischargeRequested: true,
+          dischargeRequestedDate: addDays(t, -1 - i),
+          dischargeRequestedBy: "Doctor",
+          deathDate: null
+        });
+      });
+
+      patients.push({
+        id: uid(),
+        name: "Mohan Lal",
+        age: 67,
+        sex: "M",
+        admittedDate: addDays(t, -12),
+        status: "deceased",
+        deathDate: addDays(t, -1),
+        temps: [],
+        visits: [],
+        dischargeRequested: false,
+        dischargeRequestedDate: null,
+        dischargeRequestedBy: null,
+        dischargeDate: null
+      });
+
+      return patients;
+    }
+
+    function metricCard(label, value, sub, kind = "") {
+      return `
+        <div class="card ${kind}">
+          <div class="card-label">${label}</div>
+          <div class="card-value">${value}</div>
+          <div class="card-sub">${sub || ""}</div>
+        </div>
+      `;
+    }
+
+    function filterButton(label, value) {
+      return `
+        <button class="chip ${uiFilter === value ? "active" : ""}" onclick="setFilter('${value}')">
+          ${label}
+        </button>
+      `;
+    }
+
+    function capacityAlert(m) {
+      if (m.free <= 0) {
+        return `
+          <div class="alert danger">
+            Facility is at full capacity. Discharge patients promptly to admit new patients.
+          </div>
+        `;
+      }
+
+      if (m.free <= 5) {
+        return `
+          <div class="alert warn">
+            Only ${m.free} bed${m.free === 1 ? "" : "s"} remaining.
+          </div>
+        `;
+      }
+
+      return "";
+    }
+
+    function adminAlerts(m) {
+      if (m.closed === 0) {
+        return `
+          <div class="alert info">
+            No closed cases yet. Mortality and success-rate benchmarking will appear after discharges or deaths.
+          </div>
+        `;
+      }
+
+      if (m.mortality > 15) {
+        return `
+          <div class="alert danger">
+            Mortality rate is ${m.mortality}% (${m.deaths}/${m.closed}), above the 15% benchmark. Review treatment quality.
+          </div>
+        `;
+      }
+
+      return `
+        <div class="alert success">
+          Mortality rate is ${m.mortality}% (${m.deaths}/${m.closed}), within the 15% benchmark. Success rate: ${m.success}%.
+        </div>
+      `;
+    }
+
+    function emptyState(message) {
+      const canAdd = state.role !== "doctor";
+
+      return `
+        <div class="empty">
+          <p>${message}</p>
+          <div class="actions">
+            ${canAdd ? `<button class="btn" onclick="openAddPatientModal()">Add Patient</button>` : ""}
+            <button class="btn secondary" onclick="seedDemo()">Load Demo Data</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function tempBadge(p) {
+      const t = todayTemp(p);
+
+      if (!t) {
+        return `<span class="badge warn">Not taken</span>`;
+      }
+
+      if (Number(t.temp) >= FEVER_THRESHOLD) {
+        return `<span class="badge danger">${t.temp}${TEMP_UNIT} Fever</span>`;
+      }
+
+      return `<span class="badge success">${t.temp}${TEMP_UNIT}</span>`;
+    }
+
+    function visitBadge(p) {
+      const v = todayVisit(p);
+
+      if (v) {
+        return `<span class="badge success">Visited</span>`;
+      }
+
+      if (!todayTemp(p)) {
+        return `<span class="badge muted">Waiting temp</span>`;
+      }
+
+      return `<span class="badge warn">Pending</span>`;
+    }
+
+    function dischargeBadge(p) {
+      if (p.status === "discharged") {
+        return `<span class="badge success">Discharged</span>`;
+      }
+
+      if (p.status === "deceased") {
+        return `<span class="badge danger">Deceased</span>`;
+      }
+
+      if (p.dischargeRequested) {
+        return `<span class="badge info">Requested</span>`;
+      }
+
+      if (isEligible(p)) {
+        return `<span class="badge success">Eligible</span>`;
+      }
+
+      return `<span class="badge muted">Not eligible</span>`;
+    }
+
+    function statusBadge(p) {
+      if (p.status === "discharged") {
+        return `<span class="badge success">Discharged</span>`;
+      }
+
+      if (p.status === "deceased") {
+        return `<span class="badge danger">Deceased</span>`;
+      }
+
+      return `<span class="badge info">Active</span>`;
+    }
+
+    function nurseTable(patients) {
+      return `
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Patient</th>
+                <th>Today Temp</th>
+                <th>Fever-free days</th>
+                <th>Doctor Visit</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${patients.map((p) => {
+                const t = todayTemp(p);
+
+                return `
+                  <tr>
+                    <td>
+                      <button class="link" onclick="openPatient('${p.id}')">${esc(p.name)}</button>
+                      <div class="muted small">
+                        ${p.age ? esc(p.age) + " yrs" : "Age —"} • Admitted ${p.admittedDate}
+                      </div>
+                    </td>
+                    <td>${tempBadge(p)}</td>
+                    <td>${afebrileStreak(p)} completed day${afebrileStreak(p) === 1 ? "" : "s"}</td>
+                    <td>${visitBadge(p)}</td>
+                    <td>
+                      <div class="actions">
+                        <button class="btn small secondary" onclick="openPatient('${p.id}')">View</button>
+                        <button class="btn small" onclick="openTempModal('${p.id}')">
+                          ${t ? "Update" : "Record"} Temp
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function doctorTable(patients) {
+      return `
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Patient</th>
+                <th>Today Temp</th>
+                <th>Fever-free days</th>
+                <th>Visit</th>
+                <th>Discharge</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${patients.map((p) => {
+                return `
+                  <tr>
+                    <td>
+                      <button class="link" onclick="openPatient('${p.id}')">${esc(p.name)}</button>
+                      <div class="muted small">
+                        ${p.age ? esc(p.age) + " yrs" : "Age —"} • Admitted ${p.admittedDate}
+                      </div>
+                    </td>
+                    <td>${tempBadge(p)}</td>
+                    <td>${afebrileStreak(p)} completed day${afebrileStreak(p) === 1 ? "" : "s"}</td>
+                    <td>${visitBadge(p)}</td>
+                    <td>${dischargeBadge(p)}</td>
+                    <td>
+                      <div class="actions">
+                        <button class="btn small secondary" onclick="openPatient('${p.id}')">View</button>
+                        <button class="btn small" onclick="doctorVisitGuard('${p.id}')">
+                          ${todayVisit(p) ? "Update Visit" : "Visit"}
+                        </button>
+                        ${p.dischargeRequested
+                          ? `<button class="btn small secondary" onclick="cancelDischarge('${p.id}')">Cancel Request</button>`
+                          : `<button class="btn small" onclick="requestDischarge('${p.id}')">Request</button>`
+                        }
+                      </div>
+                    </td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function adminActiveTable(patients) {
+      return `
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Patient</th>
+                <th>Status</th>
+                <th>Today Temp</th>
+                <th>Visit</th>
+                <th>Discharge</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${patients.map((p) => {
+                return `
+                  <tr>
+                    <td>
+                      <button class="link" onclick="openPatient('${p.id}')">${esc(p.name)}</button>
+                      <div class="muted small">
+                        ${p.age ? esc(p.age) + " yrs" : "Age —"} • Admitted ${p.admittedDate}
+                      </div>
+                    </td>
+                    <td>${statusBadge(p)}</td>
+                    <td>${tempBadge(p)}</td>
+                    <td>${visitBadge(p)}</td>
+                    <td>${dischargeBadge(p)}</td>
+                    <td>
+                      <div class="actions">
+                        <button class="btn small secondary" onclick="openPatient('${p.id}')">View</button>
+                        ${canAdminDischarge(p)
+                          ? `<button class="btn small" onclick="adminDischarge('${p.id}')">Discharge</button>`
+                          : ""
+                        }
+                      </div>
+                    </td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function adminReadyTable() {
+      const ready = activePatients()
+        .filter((p) => p.dischargeRequested)
+        .sort((a, b) => {
+          const aReady = canAdminDischarge(a) ? 0 : 1;
+          const bReady = canAdminDischarge(b) ? 0 : 1;
+
+          if (aReady !== bReady) return aReady - bReady;
+
+          return a.name.localeCompare(b.name);
+        });
+
+      if (!ready.length) {
+        return `<div class="empty">No discharge requests yet.</div>`;
+      }
+
+      return `
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Patient</th>
+                <th>Fever-free days</th>
+                <th>Today Temp</th>
+                <th>Visit</th>
+                <th>Readiness</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${ready.map((p) => {
+                const blockers = dischargeBlockers(p).filter((b) => b !== "doctor has not requested discharge");
+
+                return `
+                  <tr>
+                    <td>
+                      <button class="link" onclick="openPatient('${p.id}')">${esc(p.name)}</button>
+                      <div class="muted small">
+                        Requested by ${esc(p.dischargeRequestedBy || "Doctor")} on ${p.dischargeRequestedDate || "—"}
+                      </div>
+                    </td>
+                    <td>${afebrileStreak(p)} completed day${afebrileStreak(p) === 1 ? "" : "s"}</td>
+                    <td>${tempBadge(p)}</td>
+                    <td>${visitBadge(p)}</td>
+                    <td>
+                      ${blockers.length
+                        ? `
+                          <span class="badge warn">Blocked</span>
+                          <div class="muted small">${blockers.join("; ")}</div>
+                        `
+                        : `<span class="badge success">Ready</span>`
+                      }
+                    </td>
+                    <td>
+                      ${canAdminDischarge(p)
+                        ? `<button class="btn small" onclick="adminDischarge('${p.id}')">Discharge</button>`
+                        : ""
+                      }
+                    </td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function closedTable() {
+      const closed = state.patients
+        .filter((p) => p.status !== "active")
+        .sort((a, b) => {
+          const aDate = a.dischargeDate || a.deathDate || "";
+          const bDate = b.dischargeDate || b.deathDate || "";
+          return bDate.localeCompare(aDate);
+        });
+
+      if (!closed.length) {
+        return `<div class="empty">No closed cases yet.</div>`;
+      }
+
+      return `
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Patient</th>
+                <th>Outcome</th>
+                <th>Admitted</th>
+                <th>Closed date</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${closed.map((p) => {
+                return `
+                  <tr>
+                    <td>
+                      <button class="link" onclick="openPatient('${p.id}')">${esc(p.name)}</button>
+                      <div class="muted small">
+                        ${p.age ? esc(p.age) + " yrs" : "Age —"}
+                      </div>
+                    </td>
+                    <td>${statusBadge(p)}</td>
+                    <td>${p.admittedDate}</td>
+                    <td>${p.status === "discharged" ? p.dischargeDate : p.deathDate}</td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function tempHistoryRows(p) {
+      const rows = [...p.temps]
+        .sort((a, b) => b.date.localeCompare(a.date))
+        .slice(0, 10)
+        .map((t) => {
+          return `
+            <tr>
+              <td>${t.date}</td>
+              <td>${t.temp}${TEMP_UNIT}</td>
+              <td>${esc(t.by || "")}</td>
+              <td>${esc(t.time || "")}</td>
+            </tr>
+          `;
+        })
+        .join("");
+
+      return rows || `<tr><td colspan="4" class="muted">No temperatures recorded.</td></tr>`;
+    }
+
+    function visitHistoryRows(p) {
+      const rows = [...p.visits]
+        .sort((a, b) => b.date.localeCompare(a.date))
+        .slice(0, 10)
+        .map((v) => {
+          return `
+            <tr>
+              <td>${v.date}</td>
+              <td>${esc(v.treatment || "")}</td>
+              <td>${esc(v.note || "")}</td>
+              <td>${esc(v.by || "")}</td>
+            </tr>
+          `;
+        })
+        .join("");
+
+      return rows || `<tr><td colspan="4" class="muted">No doctor visits recorded.</td></tr>`;
+    }
+
+    function patientAlerts(p) {
+      const alerts = [];
+      const t = todayTemp(p);
+
+      if (p.status === "discharged") {
+        alerts.push(`
+          <div class="alert success">
+            Patient discharged as cured on ${p.dischargeDate || "—"}.
+          </div>
+        `);
+      }
+
+      if (p.status === "deceased") {
+        alerts.push(`
+          <div class="alert danger">
+            Patient deceased on ${p.deathDate || "—"}.
+          </div>
+        `);
+      }
+
+      if (p.status === "active") {
+        if (!t) {
+          alerts.push(`
+            <div class="alert warn">
+              Today's temperature has not been recorded.
+            </div>
+          `);
+        }
+
+        if (t && Number(t.temp) >= FEVER_THRESHOLD) {
+          alerts.push(`
+            <div class="alert danger">
+              Fever recorded today: ${t.temp}${TEMP_UNIT}.
+            </div>
+          `);
+        }
+
+        if (isEligible(p) && !p.dischargeRequested) {
+          alerts.push(`
+            <div class="alert success">
+              Meets the 3-day fever-free criterion. Doctor can request discharge.
+            </div>
+          `);
+        }
+
+        if (p.dischargeRequested) {
+          const blockers = dischargeBlockers(p).filter((b) => b !== "doctor has not requested discharge");
+
+          if (blockers.length) {
+            alerts.push(`
+              <div class="alert warn">
+                Discharge requested, but not ready: ${blockers.join("; ")}.
+              </div>
+            `);
+          } else {
+            alerts.push(`
+              <div class="alert info">
+                Discharge requested and ready for admin confirmation.
+              </div>
+            `);
+          }
+        }
+      }
+
+      return alerts.join("");
+    }
+
+    function detailActions(p) {
+      const buttons = [];
+
+      if (p.status === "active") {
+        if (state.role === "nurse") {
+          buttons.push(`
+            <button class="btn" onclick="openTempModal('${p.id}')">
+              ${todayTemp(p) ? "Update" : "Record"} Temperature
+            </button>
+          `);
+        }
+
+        if (state.role === "doctor") {
+          buttons.push(`
+            <button class="btn" onclick="doctorVisitGuard('${p.id}')">
+              ${todayVisit(p) ? "Update Visit" : "Complete Visit"}
+            </button>
+          `);
+
+          if (p.dischargeRequested) {
+            buttons.push(`
+              <button class="btn secondary" onclick="cancelDischarge('${p.id}')">
+                Cancel Discharge Request
+              </button>
+            `);
+          } else {
+            buttons.push(`
+              <button class="btn" onclick="requestDischarge('${p.id}')">
+                Request Discharge
+              </button>
+            `);
+          }
+
+          buttons.push(`
+            <button class="btn danger" onclick="openDeathModal('${p.id}')">
+              Mark Deceased
+            </button>
+          `);
+        }
+
+        if (state.role === "admin" && canAdminDischarge(p)) {
+          buttons.push(`
+            <button class="btn" onclick="adminDischarge('${p.id}')">
+              Confirm Discharge
+            </button>
+          `);
+        }
+      }
+
+      return buttons.join("");
+    }
+
+    function patientDetail() {
+      const p = getPatient(state.selectedPatientId);
+
+      if (!p) {
+        return `<div class="empty">Patient not found.</div>`;
+      }
+
+      const t = todayTemp(p);
+
+      return `
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <button class="btn small secondary" onclick="goBack()">← Back</button>
+              <h2>${esc(p.name)}</h2>
+              <div class="muted small">
+                ${p.age ? esc(p.age) + " yrs" : "Age —"} • ${p.sex || "—"} • Admitted ${p.admittedDate}
+              </div>
+            </div>
+
+            <div class="actions">
+              ${detailActions(p)}
+            </div>
+          </div>
+
+          ${patientAlerts(p)}
+
+          <div class="cards">
+            ${metricCard("Status", statusBadge(p), p.status === "active" ? "In facility" : "Closed case")}
+            ${metricCard("Today temp", tempBadge(p), t ? `Recorded at ${t.time || "—"}` : "Not recorded yet")}
+            ${metricCard("Fever-free days", afebrileStreak(p), "Completed days before today")}
+            ${metricCard("Discharge", dischargeBadge(p), p.dischargeRequested ? `Requested by ${esc(p.dischargeRequestedBy || "—")}` : "Doctor request required")}
+          </div>
+        </section>
+
+        <div class="grid-2">
+          <section class="panel">
+            <h3>Temperature history</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Temp</th>
+                    <th>By</th>
+                    <th>Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${tempHistoryRows(p)}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="panel">
+            <h3>Doctor visits</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Treatment</th>
+                    <th>Note</th>
+                    <th>By</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${visitHistoryRows(p)}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      `;
+    }
+
+    function nurseDashboard() {
+      const m = getMetrics();
+
+      let patients = activePatients();
+
+      const pendingTemps = patients.filter(needsTemp).length;
+      const feverToday = patients.filter((p) => hasFeverOn(p, todayStr())).length;
+      const dischargeRequests = patients.filter((p) => p.dischargeRequested).length;
+
+      if (uiFilter === "needs-temp") {
+        patients = patients.filter(needsTemp);
+      }
+
+      if (uiFilter === "temp-done") {
+        patients = patients.filter((p) => !!todayTemp(p));
+      }
+
+      if (uiFilter === "fever") {
+        patients = patients.filter((p) => hasFeverOn(p, todayStr()));
+      }
+
+      patients.sort((a, b) => {
+        const aNeed = needsTemp(a) ? 0 : 1;
+        const bNeed = needsTemp(b) ? 0 : 1;
+
+        if (aNeed !== bNeed) return aNeed - bNeed;
+
+        const aFever = hasFeverOn(a, todayStr()) ? 0 : 1;
+        const bFever = hasFeverOn(b, todayStr()) ? 0 : 1;
+
+        if (aFever !== bFever) return aFever - bFever;
+
+        return a.name.localeCompare(b.name);
+      });
+
+      return `
+        ${capacityAlert(m)}
+
+        <div class="cards">
+          ${metricCard("Active patients", m.active, `${m.free} beds free`)}
+          ${metricCard("Pending temps", pendingTemps, "today", pendingTemps ? "warn" : "success")}
+          ${metricCard("Fever today", feverToday, "needs review", feverToday ? "danger" : "success")}
+          ${metricCard("Discharge requests", dischargeRequests, "awaiting admin")}
+        </div>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Nurse temperature queue</h2>
+              <div class="muted small">
+                Daily temperature should be recorded before doctor visits.
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="btn" onclick="openAddPatientModal()">Add Patient</button>
+            </div>
+          </div>
+
+          <div class="chips">
+            ${filterButton("All", "all")}
+            ${filterButton("Needs temp", "needs-temp")}
+            ${filterButton("Temp done", "temp-done")}
+            ${filterButton("Fever today", "fever")}
+          </div>
+
+          ${activePatients().length === 0
+            ? emptyState("No active patients. Load demo data or admit a patient.")
+            : patients.length === 0
+              ? `<div class="empty">No patients match this filter.</div>`
+              : nurseTable(patients)
+          }
+        </section>
+      `;
+    }
+
+    function doctorDashboard() {
+      const m = getMetrics();
+
+      let patients = activePatients();
+
+      const pendingVisits = patients.filter(needsVisit).length;
+      const eligible = patients.filter(isEligible).length;
+      const requested = patients.filter((p) => p.dischargeRequested).length;
+      const feverToday = patients.filter((p) => hasFeverOn(p, todayStr())).length;
+
+      if (uiFilter === "needs-visit") {
+        patients = patients.filter(needsVisit);
+      }
+
+      if (uiFilter === "eligible") {
+        patients = patients.filter(isEligible);
+      }
+
+      if (uiFilter === "requested") {
+        patients = patients.filter((p) => p.dischargeRequested);
+      }
+
+      if (uiFilter === "fever") {
+        patients = patients.filter((p) => hasFeverOn(p, todayStr()));
+      }
+
+      patients.sort((a, b) => {
+        const aNeed = needsVisit(a) ? 0 : 1;
+        const bNeed = needsVisit(b) ? 0 : 1;
+
+        if (aNeed !== bNeed) return aNeed - bNeed;
+
+        const aEligible = isEligible(a) ? 0 : 1;
+        const bEligible = isEligible(b) ? 0 : 1;
+
+        if (aEligible !== bEligible) return aEligible - bEligible;
+
+        return a.name.localeCompare(b.name);
+      });
+
+      return `
+        ${capacityAlert(m)}
+
+        <div class="cards">
+          ${metricCard("Active patients", m.active, `${m.free} beds free`)}
+          ${metricCard("Pending visits", pendingVisits, "after temp recorded", pendingVisits ? "warn" : "success")}
+          ${metricCard("Eligible for discharge", eligible, "3 fever-free days", eligible ? "success" : "")}
+          ${metricCard("Discharge requests", requested, "awaiting admin")}
+          ${metricCard("Fever today", feverToday, "needs review", feverToday ? "danger" : "success")}
+        </div>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Doctor visit queue</h2>
+              <div class="muted small">
+                Doctor visits are enabled only after today's temperature is recorded.
+              </div>
+            </div>
+          </div>
+
+          <div class="chips">
+            ${filterButton("All", "all")}
+            ${filterButton("Needs visit", "needs-visit")}
+            ${filterButton("Eligible", "eligible")}
+            ${filterButton("Requested", "requested")}
+            ${filterButton("Fever today", "fever")}
+          </div>
+
+          ${activePatients().length === 0
+            ? emptyState("No active patients. Load demo data to explore the workflow.")
+            : patients.length === 0
+              ? `<div class="empty">No patients match this filter.</div>`
+              : doctorTable(patients)
+          }
+        </section>
+      `;
+    }
+
+    function adminDashboard() {
+      const m = getMetrics();
+
+      const active = activePatients().sort((a, b) => a.name.localeCompare(b.name));
+      const pendingTemps = active.filter(needsTemp).length;
+      const pendingVisits = active.filter(needsVisit).length;
+
+      return `
+        ${adminAlerts(m)}
+        ${capacityAlert(m)}
+
+        <div class="cards">
+          ${metricCard("Occupancy", `${m.active}/${m.capacity}`, `${m.free} beds free`, m.free <= 0 ? "danger" : "")}
+          ${metricCard("Pending temps", pendingTemps, "today", pendingTemps ? "warn" : "success")}
+          ${metricCard("Pending visits", pendingVisits, "after temp recorded", pendingVisits ? "warn" : "success")}
+          ${metricCard("Discharged", m.discharged, "cured cases", "success")}
+          ${metricCard("Deaths", m.deaths, "closed mortality cases", m.deaths ? "danger" : "")}
+          ${metricCard(
+            "Success rate",
+            m.success === null ? "N/A" : `${m.success}%`,
+            m.closed ? `${m.closed} closed cases` : "No closed cases",
+            m.success !== null && m.success < 85 ? "danger" : "success"
+          )}
+        </div>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Discharge requests</h2>
+              <div class="muted small">
+                Admin can discharge only after doctor request, 3 full fever-free days, today's temperature, and today's doctor visit.
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="btn" onclick="openAddPatientModal()">Add Patient</button>
+            </div>
+          </div>
+
+          ${adminReadyTable()}
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Active patients</h2>
+          </div>
+
+          ${active.length ? adminActiveTable(active) : emptyState("No active patients.")}
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Closed cases</h2>
+          </div>
+
+          ${closedTable()}
+        </section>
+      `;
+    }
+
+    function loginView() {
+      return `
+        <div class="login-wrap">
+          <div class="login-card">
+            <h1>MedicoCare</h1>
+            <p class="muted">
+              Temperature tracking, doctor visits, discharge workflow, occupancy control, and mortality benchmarking for a 74-bed quarantine facility.
+            </p>
+
+            <div class="role-grid">
+              <div class="role-card">
+                <h2>Nurse</h2>
+                <p>
+                  Record and update daily temperatures. See which patients are missing measurements and which patients have fever today.
+                </p>
+                <button class="btn" onclick="selectRole('nurse')">Continue as Nurse</button>
+              </div>
+
+              <div class="role-card">
+                <h2>Doctor</h2>
+                <p>
+                  Review temperatures, complete daily visits, request discharge for eligible patients, and record deaths.
+                </p>
+                <button class="btn" onclick="selectRole('doctor')">Continue as Doctor</button>
+              </div>
+
+              <div class="role-card">
+                <h2>Admin</h2>
+                <p>
+                  Monitor occupancy, confirm discharge requests, and track mortality against the 15% benchmark.
+                </p>
+                <button class="btn" onclick="selectRole('admin')">Continue as Admin</button>
+              </div>
+            </div>
+
+            <div class="muted small">
+              Prototype data is stored in your browser localStorage. For a real multi-user deployment, connect this frontend to a backend database and authentication system.
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function layout(content) {
+      return `
+        <div class="app">
+          <header class="topbar">
+            <div>
+              <div class="brand">QuarantineCare</div>
+              <div class="muted small">
+                Virus quarantine & treatment workflow prototype
+              </div>
+            </div>
+
+            <div class="top-controls">
+              <span class="badge role">${roleLabel(state.role)}</span>
+              <button class="btn small secondary" onclick="seedDemo()">Load Demo</button>
+              <button class="btn small secondary" onclick="resetApp()">Reset</button>
+              <button class="btn small danger" onclick="logout()">Logout</button>
+            </div>
+          </header>
+
+          <main class="main">
+            ${content}
+          </main>
+        </div>
+      `;
+    }
+
+    function render() {
+      const root = document.getElementById("app");
+
+      if (!state.role) {
+        root.innerHTML = loginView();
+        return;
+      }
+
+      if (state.selectedPatientId && !getPatient(state.selectedPatientId)) {
+        state.selectedPatientId = null;
+      }
+
+      let content = "";
+
+      if (state.selectedPatientId) {
+        content = patientDetail();
+      } else if (state.role === "nurse") {
+        content = nurseDashboard();
+      } else if (state.role === "doctor") {
+        content = doctorDashboard();
+      } else {
+        content = adminDashboard();
+      }
+
+      root.innerHTML = layout(content);
+    }
+
+    render();
+  </script>
+</body>
+</html>
